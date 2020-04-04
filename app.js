@@ -12,6 +12,29 @@ const app = express();
 
 app.use(bodyParser.json());
 
+const user = async userId => {
+  try {
+    let user = await User.findById(userId);
+    return {
+      ...user._doc,
+      createdEvents: events.bind(this, user._doc.createdEvents)
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+
+const events = async eventId => {
+  try {
+    let event = await Event.find({ _id: { $in: eventId } });
+    return event.map(event => {
+      return { ...event._doc, creator: user.bind(this, event.creator) };
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
 app.use(
   "/graphql",
   graphQlHttp({
@@ -23,12 +46,14 @@ app.use(
             description: String!
             price: Float!
             date: String!
+            creator:User!
         }
 
         type User {
           _id:ID!
           email:String!
           password:String
+          createdEvents:[Event!]
         }
 
         input EventInput {
@@ -63,7 +88,10 @@ app.use(
         try {
           let events = await Event.find();
           return events.map(event => {
-            return { ...event._doc };
+            return {
+              ...event._doc,
+              creator: user.bind(this, event._doc.creator)
+            };
           });
         } catch (error) {
           throw error;
@@ -81,9 +109,12 @@ app.use(
         try {
           let createdEvent;
           let saveEventResponse = await event.save();
-          createdEvent = { ...saveEventResponse._doc };
+          createdEvent = {
+            ...saveEventResponse._doc,
+            creator: user.bind(this, saveEventResponse.creator)
+          };
           const findUser = await User.findById("5e8834e355e060394898d741");
-          if (findUser === null) {
+          if (!findUser) {
             throw new Error("User not found");
           } else {
             findUser.createdEvents.push(event);
@@ -94,6 +125,7 @@ app.use(
           throw error;
         }
       },
+
       createUser: async args => {
         try {
           const user = await User.findOne({ email: args.userInput.email });
