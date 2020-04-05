@@ -13,7 +13,10 @@ const { transformEvent } = require("./merge");
         throw error;
       }
     },
-    createEvent: async (args) => {
+    createEvent: async (args, req) => {
+      if (!req.isAuth) {
+        throw new Error("You are not authorized");
+      }
       const event = new Event({
         title: args.eventInput.title,
         description: args.eventInput.description,
