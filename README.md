@@ -1,4 +1,4 @@
-# EventX 🏕
+# EventX
 
 A minimal application for event booking
 
