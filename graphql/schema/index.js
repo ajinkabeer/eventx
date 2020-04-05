@@ -26,7 +26,7 @@ type User {
   createdEvents:[Event!]
 }
 
-type AuthDate {
+type AuthData {
     userId:ID!
     token:String!
     tokenExpiration:Int!
