@@ -6,3 +6,34 @@ body {
   -moz-osx-font-smoothing: grayscale;
   font-family: "Quicksand", sans-serif;
 }
+
+.form-control label,
+.form-control input,
+.form-control textarea {
+  width: 100%;
+  display: block;
+}
+
+.form-control label {
+  margin-bottom: 0.5rem;
+}
+
+.form-control {
+  margin-bottom: 1rem;
+}
+
+.form-actions button {
+  background: #5101d1;
+  color: #fff;
+  border: 1px solid black;
+  border-radius: 2px;
+  padding: 0.5rem 1rem;
+  margin-right: 1rem;
+  outline: none;
+}
+
+.form-actions button:hover,
+.form-actions button:active {
+  background: #fff;
+  color: #5101d1;
+}
