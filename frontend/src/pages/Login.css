@@ -19,7 +19,7 @@
 }
 
 .form-actions button {
-  background: #ef4836;
+  background: #5101d1;
   color: #fff;
   border: 1px solid black;
   border-radius: 2px;
@@ -31,5 +31,5 @@
 .form-actions button:hover,
 .form-actions button:active {
   background: #fff;
-  color: #ef4836;
+  color: #5101d1;
 }
