@@ -1,12 +1,25 @@
 import React, { Component } from "react";
+import LoginContext from "../context/login";
 import "./Login.css";
 
 class Login extends Component {
+  state = {
+    isLogin: true,
+  };
+
+  static contextType = LoginContext;
+
   constructor(props) {
     super(props);
     this.emailEl = React.createRef();
     this.passwordEl = React.createRef();
   }
+
+  switchModeHandler = () => {
+    this.setState((prevState) => {
+      return { isLogin: !prevState.isLogin };
+    });
+  };
 
   submitHandler = async (event) => {
     event.preventDefault();
@@ -17,21 +30,35 @@ class Login extends Component {
       return;
     }
 
-    const query = {
+    let requestBody = {
       query: `
-        mutation {
-          createUser(userInput:{email:"${email}",password:"${password}"}){
-            _id
-            email
-          }
+      query {
+        login(email:"${email}",password:"${password}"){
+          userId
+          token
+          tokenExpiration
         }
+      }
       `,
     };
+
+    if (!this.state.isLogin) {
+      requestBody = {
+        query: `
+          mutation {
+            createUser(userInput:{email:"${email}",password:"${password}"}){
+              _id
+              email
+            }
+          }
+        `,
+      };
+    }
 
     try {
       const response = await fetch("http://localhost:3000/graphql", {
         method: "POST",
-        body: JSON.stringify(query),
+        body: JSON.stringify(requestBody),
         headers: {
           "Content-Type": "application/json",
         },
@@ -40,7 +67,13 @@ class Login extends Component {
         throw new Error("Failed");
       }
       const responseData = await response.json();
-      console.log(responseData);
+      if (responseData.data.login.token) {
+        this.context.login(
+          responseData.data.login.token,
+          responseData.data.login.userId,
+          responseData.data.login.tokenExpiration
+        );
+      }
     } catch (error) {
       throw error;
     }
@@ -49,6 +82,8 @@ class Login extends Component {
   render() {
     return (
       <form className="login-form" onSubmit={this.submitHandler}>
+        <h1>Login</h1>
+
         <div className="form-control">
           <label htmlFor="email">Email</label>
           <input type="email" id="email" ref={this.emailEl} />
@@ -58,8 +93,10 @@ class Login extends Component {
           <input type="password" id="password" ref={this.passwordEl} />
         </div>
         <div className="form-actions">
-          <button type="submit">SignUp</button>
-          <button type="button">Login</button>
+          <button type="submit">Submit</button>
+          <button type="button" onClick={this.switchModeHandler}>
+            Switch to {this.state.isLogin ? "Signup" : "Login"}
+          </button>
         </div>
       </form>
     );
