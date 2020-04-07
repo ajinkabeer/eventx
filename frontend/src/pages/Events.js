@@ -4,12 +4,14 @@ import Modal from "../components/Modal/Modal";
 import Backdrop from "../components/Backdrop/Backdrop";
 import LoginContext from "../context/login";
 import EventList from "../components/Events/EventList/EventList";
+import Spinner from "../components/Spinner/Spinner";
 import "./css/events.css";
 
 class Events extends Component {
   state = {
     creating: false,
     events: [],
+    isLoading: false,
   };
 
   static contextType = LoginContext;
@@ -102,6 +104,7 @@ class Events extends Component {
   };
 
   fetchEvents = async () => {
+    this.setState({ isLoading: true });
     const requestBody = {
       query: `
           query {
@@ -132,8 +135,9 @@ class Events extends Component {
       }
       const responseData = await response.json();
       const events = responseData.data.events;
-      this.setState({ events });
+      this.setState({ events, isLoading: false });
     } catch (error) {
+      this.setState({ isLoading: false });
       throw error;
     }
   };
@@ -182,10 +186,14 @@ class Events extends Component {
             </button>
           </div>
         )}
-        <EventList
-          events={this.state.events}
-          authUserId={this.context.userId}
-        />
+        {this.state.isLoading ? (
+          <Spinner />
+        ) : (
+          <EventList
+            events={this.state.events}
+            authUserId={this.context.userId}
+          />
+        )}
       </React.Fragment>
     );
   }
