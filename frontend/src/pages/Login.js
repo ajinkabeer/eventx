@@ -67,7 +67,9 @@ class Login extends Component {
         throw new Error("Failed");
       }
       const responseData = await response.json();
-      if (responseData.data.login.token) {
+      console.log(responseData);
+
+      if (responseData.data.login !== undefined) {
         this.context.login(
           responseData.data.login.token,
           responseData.data.login.userId,

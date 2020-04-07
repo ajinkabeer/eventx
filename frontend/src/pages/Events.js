@@ -60,10 +60,6 @@ class Events extends Component {
               description
               date
               price
-              creator {
-                _id
-                email
-              }
             }
           }
         `,
@@ -81,8 +77,21 @@ class Events extends Component {
       if (response.status !== 200 && response.status !== 201) {
         throw new Error("Failed");
       }
-      await response.json();
-      this.fetchEvents();
+      let responsed = await response.json();
+      this.setState((prevState) => {
+        const updateEvents = [...prevState.events];
+        updateEvents.push({
+          _id: responsed.data.createEvent._id,
+          title: responsed.data.createEvent.title,
+          description: responsed.data.createEvent.description,
+          date: responsed.data.createEvent.date,
+          price: responsed.data.createEvent.price,
+          creator: {
+            _id: this.context.userId,
+          },
+        });
+        this.setState({ events: updateEvents });
+      });
     } catch (error) {
       throw error;
     }
@@ -173,7 +182,10 @@ class Events extends Component {
             </button>
           </div>
         )}
-        <EventList events={this.state.events} />
+        <EventList
+          events={this.state.events}
+          authUserId={this.context.userId}
+        />
       </React.Fragment>
     );
   }
