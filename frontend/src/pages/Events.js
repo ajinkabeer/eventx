@@ -8,6 +8,7 @@ import "./css/events.css";
 class Events extends Component {
   state = {
     creating: false,
+    events: [],
   };
 
   static contextType = LoginContext;
@@ -18,6 +19,10 @@ class Events extends Component {
     this.priceElRef = React.createRef();
     this.dateElRef = React.createRef();
     this.descriptionElRef = React.createRef();
+  }
+
+  componentDidMount() {
+    this.fetchEvents();
   }
 
   startCreateEventHandler = () => {
@@ -75,8 +80,8 @@ class Events extends Component {
       if (response.status !== 200 && response.status !== 201) {
         throw new Error("Failed");
       }
-      const responseData = await response.json();
-      console.log(responseData);
+      await response.json();
+      this.fetchEvents();
     } catch (error) {
       throw error;
     }
@@ -86,7 +91,51 @@ class Events extends Component {
     this.setState({ creating: false });
   };
 
+  fetchEvents = async () => {
+    const requestBody = {
+      query: `
+          query {
+            events {
+              _id
+              title
+              description
+              date
+              price
+              creator {
+                _id
+                email
+              }
+            }
+          }
+        `,
+    };
+    try {
+      const response = await fetch("http://localhost:3000/graphql", {
+        method: "POST",
+        body: JSON.stringify(requestBody),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (response.status !== 200 && response.status !== 201) {
+        throw new Error("Failed");
+      }
+      const responseData = await response.json();
+      const events = responseData.data.events;
+      this.setState({ events });
+    } catch (error) {
+      throw error;
+    }
+  };
+
   render() {
+    const eventList = this.state.events.map((event) => {
+      return (
+        <li key={event._id} className="events-list-item">
+          {event.title}
+        </li>
+      );
+    });
     return (
       <React.Fragment>
         {this.state.creating && <Backdrop />}
@@ -130,6 +179,7 @@ class Events extends Component {
             </button>
           </div>
         )}
+        <ul className="events-list">{eventList}</ul>
       </React.Fragment>
     );
   }
