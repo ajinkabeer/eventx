@@ -41,6 +41,45 @@ class Events extends Component {
     }
 
     const event = { title, price, date, description };
+    this.sendEvents(event);
+  };
+
+  sendEvents = async ({ title, price, date, description }) => {
+    const requestBody = {
+      query: `
+          mutation {
+            createEvent(eventInput: {title: "${title}", description: "${description}", price: ${price}, date: "${date}"}) {
+              _id
+              title
+              description
+              date
+              price
+              creator {
+                _id
+                email
+              }
+            }
+          }
+        `,
+    };
+    try {
+      const token = this.context.token;
+      const response = await fetch("http://localhost:3000/graphql", {
+        method: "POST",
+        body: JSON.stringify(requestBody),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      });
+      if (response.status !== 200 && response.status !== 201) {
+        throw new Error("Failed");
+      }
+      const responseData = await response.json();
+      console.log(responseData);
+    } catch (error) {
+      throw error;
+    }
   };
 
   modalCancelHandler = () => {
