@@ -180,7 +180,6 @@ class Events extends Component {
         throw new Error("Failed");
       }
       const responseData = await response.json();
-      console.log(responseData);
       this.setState({ isLoading: false, selectedEvent: null });
     } catch (error) {
       this.setState({ isLoading: false });
