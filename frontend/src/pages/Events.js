@@ -58,8 +58,8 @@ class Events extends Component {
   sendEvents = async ({ title, price, date, description }) => {
     const requestBody = {
       query: `
-          mutation {
-            createEvent(eventInput: {title: "${title}", description: "${description}", price: ${price}, date: "${date}"}) {
+          mutation createEvent($title:String!,$description:String!, $price:Float!, $date:String!) {
+            createEvent(eventInput: {title: $title, description: $description, price: $price, date: $date}) {
               _id
               title
               description
@@ -68,6 +68,12 @@ class Events extends Component {
             }
           }
         `,
+      variables: {
+        title: title,
+        price: price,
+        date: date,
+        description: description,
+      },
     };
     try {
       const token = this.context.token;
@@ -164,14 +170,17 @@ class Events extends Component {
     this.setState({ isLoading: true });
     const requestBody = {
       query: `
-          mutation {
-            bookEvent(eventId:"${this.state.selectedEvent._id}"){
+          mutation BookEvent($id:ID!) {
+            bookEvent(eventId:$id){
               _id
               createdAt
               updatedAt
             }
           }
         `,
+      variables: {
+        id: this.state.selectedEvent._id,
+      },
     };
     try {
       const response = await fetch("http://localhost:3000/graphql", {
