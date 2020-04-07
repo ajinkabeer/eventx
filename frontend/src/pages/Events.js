@@ -15,6 +15,8 @@ class Events extends Component {
     selectedEvent: null,
   };
 
+  isActive = true;
+
   static contextType = LoginContext;
 
   constructor(props) {
@@ -136,9 +138,13 @@ class Events extends Component {
       }
       const responseData = await response.json();
       const events = responseData.data.events;
-      this.setState({ events, isLoading: false });
+      if (this.isActive) {
+        this.setState({ events, isLoading: false });
+      }
     } catch (error) {
-      this.setState({ isLoading: false });
+      if (this.isActive) {
+        this.setState({ isLoading: false });
+      }
       throw error;
     }
   };
@@ -179,13 +185,17 @@ class Events extends Component {
       if (response.status !== 200 && response.status !== 201) {
         throw new Error("Failed");
       }
-      const responseData = await response.json();
+      await response.json();
       this.setState({ isLoading: false, selectedEvent: null });
     } catch (error) {
       this.setState({ isLoading: false });
       throw error;
     }
   };
+
+  componentWillUnmount() {
+    this.isActive = false;
+  }
 
   render() {
     return (

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import LoginContext from "../context/login";
 import Spinner from "../components/Spinner/Spinner";
+
 class Bookings extends Component {
   state = {
     isLoading: false,
@@ -39,12 +40,10 @@ class Bookings extends Component {
           Authorization: "Bearer " + this.context.token,
         },
       });
-      console.log("Response", response);
       if (response.status !== 200 && response.status !== 201) {
         throw new Error("Failed");
       }
       const responseData = await response.json();
-      console.log(responseData);
       const bookings = responseData.data.booking;
       this.setState({ bookings, isLoading: false });
     } catch (error) {
@@ -56,14 +55,17 @@ class Bookings extends Component {
   render() {
     return (
       <>
-        {this.state.isLoading && <Spinner />}
-        <ul>
-          {this.state.bookings
-            ? this.state.bookings.map((booking) => (
-                <li>{booking.event.title}</li>
-              ))
-            : null}
-        </ul>
+        {this.state.isLoading ? (
+          <Spinner />
+        ) : (
+          <ul>
+            {this.state.bookings
+              ? this.state.bookings.map((booking) => (
+                  <li key={booking._id}>{booking.event.title}</li>
+                ))
+              : null}
+          </ul>
+        )}
       </>
     );
   }

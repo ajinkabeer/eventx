@@ -67,7 +67,6 @@ class Login extends Component {
         throw new Error("Failed");
       }
       const responseData = await response.json();
-      console.log(responseData);
 
       if (responseData.data.login !== undefined) {
         this.context.login(
@@ -88,11 +87,16 @@ class Login extends Component {
 
         <div className="form-control">
           <label htmlFor="email">Email</label>
-          <input type="email" id="email" ref={this.emailEl} />
+          <input type="email" id="email" ref={this.emailEl} autoComplete="on" />
         </div>
         <div className="form-control">
           <label htmlFor="password">Password</label>
-          <input type="password" id="password" ref={this.passwordEl} />
+          <input
+            type="password"
+            id="password"
+            ref={this.passwordEl}
+            autoComplete="on"
+          />
         </div>
         <div className="form-actions">
           <button type="submit">Submit</button>
