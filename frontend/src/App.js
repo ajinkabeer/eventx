@@ -14,11 +14,21 @@ class App extends Component {
     userId: null,
   };
 
+  componentDidMount() {
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    if (token && userId) {
+      this.setState({ token, userId });
+    }
+  }
+
   login = (token, userId) => {
     this.setState({ token: token, userId: userId });
   };
 
   logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userid");
     this.setState({ token: null, userId: null });
   };
 

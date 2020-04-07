@@ -82,6 +82,8 @@ class Login extends Component {
           responseData.data.login.userId,
           responseData.data.login.tokenExpiration
         );
+        localStorage.setItem("token", responseData.data.login.token);
+        localStorage.setItem("userId", responseData.data.login.userId);
       }
     } catch (error) {
       throw error;
