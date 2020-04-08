@@ -144,7 +144,7 @@ class Login extends Component {
             className={this.state.passwordInvalid ? "error" : "no-error"}
             htmlFor="error"
           >
-            Invalid Email
+            Invalid password
           </label>
         </div>
         <div className="form-actions">
