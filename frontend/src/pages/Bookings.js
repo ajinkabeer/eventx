@@ -2,12 +2,12 @@ import React, { Component } from "react";
 import LoginContext from "../context/login";
 import Spinner from "../components/Spinner/Spinner";
 import BookingList from "../components/Bookings/BookingsList/BookList";
-import { toast } from "react-toastify";
-
+import BookingsChart from "../components/BookingsChart/BookingsChart";
 class Bookings extends Component {
   state = {
     isLoading: false,
     bookings: [],
+    contentType: "Booking",
   };
 
   static contextType = LoginContext;
@@ -95,19 +95,39 @@ class Bookings extends Component {
     }
   };
 
+  changeContentTypeHandler = (contentType) => {
+    if (contentType === "Booking") {
+      this.setState({ contentType: "Booking" });
+    } else {
+      this.setState({ contentType: "Chart" });
+    }
+  };
+
   render() {
-    return (
-      <>
-        {this.state.isLoading ? (
-          <Spinner />
-        ) : (
-          <BookingList
-            bookings={this.state.bookings}
-            onDelete={this.deleteBookingHandler}
-          />
-        )}
-      </>
-    );
+    let content = <Spinner />;
+    if (!this.state.isLoading) {
+      content = (
+        <>
+          <div>
+            <button onClick={() => this.changeContentTypeHandler("Booking")}>
+              Booking
+            </button>
+            <button onClick={() => this.changeContentTypeHandler("Chart")}>
+              Chart
+            </button>
+          </div>
+          <div>
+            {this.state.contentType === "Booking" ? (
+              <BookingList
+                bookings={this.state.bookings}
+                onDelete={this.deleteBookingHandler}
+              />
+            ) : null}
+          </div>
+        </>
+      );
+    }
+    return <> {content} </>;
   }
 }
 
