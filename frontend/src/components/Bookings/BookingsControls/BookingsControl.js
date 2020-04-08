@@ -2,7 +2,6 @@ import React from "react";
 import "./BookingsControl.css";
 
 const bookingsControl = (props) => {
-  console.log(props);
   return (
     <div className="bookings-control">
       <button

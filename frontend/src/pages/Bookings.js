@@ -4,6 +4,7 @@ import Spinner from "../components/Spinner/Spinner";
 import BookingList from "../components/Bookings/BookingsList/BookList";
 import BookingsChart from "../components/Bookings/BookingsChart/BookingsChart";
 import BookingsControl from "../components/Bookings/BookingsControls/BookingsControl";
+
 class Bookings extends Component {
   state = {
     isLoading: false,
@@ -29,6 +30,7 @@ class Bookings extends Component {
                _id
                title
                date
+               price
              }
             }
           }
@@ -119,7 +121,9 @@ class Bookings extends Component {
                 bookings={this.state.bookings}
                 onDelete={this.deleteBookingHandler}
               />
-            ) : null}
+            ) : (
+              <BookingsChart bookings={this.state.bookings} />
+            )}
           </div>
         </>
       );
