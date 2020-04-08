@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import LoginContext from "../context/login";
 import Spinner from "../components/Spinner/Spinner";
 import BookingList from "../components/Bookings/BookingsList/BookList";
-import BookingsChart from "../components/BookingsChart/BookingsChart";
+import BookingsChart from "../components/Bookings/BookingsChart/BookingsChart";
+import BookingsControl from "../components/Bookings/BookingsControls/BookingsControl";
 class Bookings extends Component {
   state = {
     isLoading: false,
@@ -108,14 +109,10 @@ class Bookings extends Component {
     if (!this.state.isLoading) {
       content = (
         <>
-          <div>
-            <button onClick={() => this.changeContentTypeHandler("Booking")}>
-              Booking
-            </button>
-            <button onClick={() => this.changeContentTypeHandler("Chart")}>
-              Chart
-            </button>
-          </div>
+          <BookingsControl
+            activeContentType={this.state.contentType}
+            onChange={this.changeContentTypeHandler}
+          />
           <div>
             {this.state.contentType === "Booking" ? (
               <BookingList
