@@ -6,9 +6,9 @@ const eventItem = (props) => {
     <li key={props._id} className="events-list-item">
       <div>
         <h1>{props.title}</h1>
-        <h2>
-          ${props.price}, {new Date(props.date).toLocaleDateString()}
-        </h2>
+        <h2>€ {props.price}</h2>
+        <h2> {new Date(props.date).toLocaleDateString()}</h2>
+        <p>{props.descriptions}</p>
       </div>
       <div>
         {props.userId === props.creatorId ? (

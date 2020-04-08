@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import LoginContext from "../context/login";
+import { toast } from "react-toastify";
 import "./css/login.css";
 
 class Login extends Component {
@@ -75,7 +76,9 @@ class Login extends Component {
         throw new Error("Failed");
       }
       const responseData = await response.json();
-
+      if (!this.state.isLogin) {
+        toast.success("User created 🚀");
+      }
       if (responseData.data.login !== undefined) {
         this.context.login(
           responseData.data.login.token,

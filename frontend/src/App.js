@@ -5,6 +5,8 @@ import Bookings from "./pages/Bookings";
 import Events from "./pages/Events";
 import MainNavigation from "./components/Navigation/MainNavigation";
 import LoginContext from "./context/login";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import "./App.css";
 
@@ -61,6 +63,7 @@ class App extends Component {
               )}
               {!this.state.token && <Redirect to="/login" exact />}
             </Switch>
+            <ToastContainer autoClose={3000} hideProgressBar />
           </main>
         </LoginContext.Provider>
       </BrowserRouter>

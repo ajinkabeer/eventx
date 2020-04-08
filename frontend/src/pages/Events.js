@@ -254,7 +254,9 @@ class Events extends Component {
             confirmText={this.context.token ? "Book" : "Confirm"}
           >
             <h1>{this.state.selectedEvent.title}</h1>
-            <h2>{this.state.selectedEvent.price}</h2>
+            <h3>{this.state.selectedEvent.description}</h3>
+
+            <h3>€ {this.state.selectedEvent.price}</h3>
             <p>
               {new Date(this.state.selectedEvent.date).toLocaleDateString()}
             </p>

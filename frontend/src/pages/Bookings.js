@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import LoginContext from "../context/login";
 import Spinner from "../components/Spinner/Spinner";
 import BookingList from "../components/Bookings/BookingsList/BookList";
+import { toast } from "react-toastify";
 
 class Bookings extends Component {
   state = {
@@ -80,6 +81,7 @@ class Bookings extends Component {
       if (response.status !== 200 && response.status !== 201) {
         throw new Error("Failed");
       }
+
       await response.json();
       this.setState((prevState) => {
         const updatedBookings = prevState.bookings.filter((booking) => {
