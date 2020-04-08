@@ -8,5 +8,3 @@ phases:
 
       # Upgrade AWS CLI to the latest version
       - pip install --upgrade awscli
-
-      - npm start
